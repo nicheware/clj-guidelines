@@ -1,0 +1,21 @@
+digraph X {
+  rankdir="TB";
+
+  accounts [label="accounts"]
+  user [label="accounts.user"]
+  db [label="accounts.user.db"]
+  postgres [label="accounts.user.db.postgres"]
+
+  subgraph bidir_event_bus_edges {
+    edge [esep=10,style=dotted,color=red,label="prohibited"]
+    db -> user
+    postgres -> db
+  }
+
+  accounts -> user
+  user -> db
+  db -> postgres
+  user -> postgres
+  accounts -> postgres
+
+}

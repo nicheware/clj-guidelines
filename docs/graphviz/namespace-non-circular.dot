@@ -1,0 +1,16 @@
+digraph X {
+  rankdir="TB";
+
+  widget [label="app.domain.widget"]
+  bracket [label="app.domain.bracket"]
+  screw [label="app.domain.screw"]
+
+  subgraph bidir_event_bus_edges {
+    edge [esep=10,style=dotted,color=red,label="prohibited"]
+    screw -> widget
+  }
+
+  widget -> bracket
+  bracket -> screw
+
+}

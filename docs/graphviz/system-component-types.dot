@@ -1,0 +1,23 @@
+digraph X {
+  rankdir="TB";
+  //node[style=filled]
+
+  node_mobile[label="Mobile client"]
+  node_web[label="Web client"]
+  node_platform[label="Platform service"]
+  node_router[label="Router service"]
+  node_app[label="Application service"]
+  node_event_bus[label="Event bus"]
+
+  subgraph bidir_event_bus_edges {
+    edge [style=dotted,dir=both]
+    node_platform -> node_event_bus
+  }
+
+  node_mobile -> node_router
+  node_web -> node_router
+  node_router -> node_app
+  node_router -> node_platform
+  node_app -> node_platform
+  node_platform -> node_platform
+}

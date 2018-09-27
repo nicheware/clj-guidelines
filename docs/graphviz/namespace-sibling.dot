@@ -1,0 +1,16 @@
+digraph X {
+  rankdir="TB";
+
+  accounts [label="accounts"]
+  user [label="accounts.user"]
+  routes [label="accounts.user.routes"]
+  db [label="accounts.user.db"]
+  manager [label="accounts.user.manager"]
+
+  accounts -> user
+  user -> manager
+  user -> db
+  user -> routes
+  routes -> manager
+  manager -> db
+}

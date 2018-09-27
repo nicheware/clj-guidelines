@@ -1,0 +1,22 @@
+digraph X {
+  rankdir="TB";
+
+  curve [label="pattern.domain.curve"]
+  grid [label="pattern.domain.curve.grid"]
+  impl [label="pattern.domain.curve.impl"]
+  implgrid [label="pattern.domain.curve.impl.grid"]
+  mouse [label="pattern.client.view.mouse"]
+
+  subgraph bidir_event_bus_edges {
+    edge [esep=10,style=dotted,color=red,label="prohibited"]
+    mouse -> impl
+    mouse -> implgrid
+  }
+
+  curve -> implgrid
+  grid -> implgrid
+  curve -> impl
+  impl -> implgrid
+  mouse -> curve
+  mouse -> grid
+}
