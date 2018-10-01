@@ -1,0 +1,19 @@
+digraph X {
+  rankdir="TB";
+
+
+  bargello_reads [label="nicheware.pattern.components.bargello.state.reads"]
+  bargello_mutations [label="nicheware.pattern.components.bargello.state.mutations"]
+  bargello_domain [label="nicheware.pattern.components.bargello.domain"]
+
+  subgraph bidir_event_bus_edges {
+    node [color=red]
+    bargello_view [label="nicheware.pattern.components.bargello.view"]
+  }
+
+  bargello_view -> bargello_reads
+  bargello_view -> bargello_mutations
+  bargello_view -> bargello_domain
+  bargello_mutations -> bargello_domain
+  
+}

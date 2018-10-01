@@ -1,0 +1,25 @@
+digraph X {
+  rankdir="TB";
+  # size="10!";
+
+  client [label="...pattern-designer.client"]
+  view [label="...pattern-designer.view"]
+  state [label="...pattern-designer.state"]
+  bargello_view [label="...bargello.view"]
+  bargello_read [label="...bargello.state.read"]
+  bargello_mutation [label="...bargello.state.mutation"]
+  bargello_domain [label="...bargello.domain"]
+  cognito_manager [label="...cognito.client.manager"]
+  cognito_domain [label="...cognito.client.domain"]
+
+  client -> view
+  client -> state
+  view -> bargello_view
+  view -> cognito_manager
+  cognito_manager -> cognito_domain
+  bargello_view -> bargello_read
+  bargello_view -> bargello_mutation
+  bargello_view -> bargello_domain
+  bargello_mutation -> bargello_domain
+  
+}

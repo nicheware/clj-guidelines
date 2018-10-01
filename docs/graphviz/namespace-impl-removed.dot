@@ -1,10 +1,10 @@
 digraph X {
   rankdir="TB";
 
-  grid [label="pattern.domain.curve.grid"]
-  implgrid [label="pattern.domain.curve.impl.grid"]
-  implrows [label="pattern.domain.curve.impl.grid.rows"]
-  util [label="pattern.domain.curve.util"]
+  grid [label="bargello.domain.curve.grid"]
+  implgrid [label="bargello.domain.curve.impl.grid"]
+  implrows [label="bargello.domain.curve.impl.grid.rows"]
+  util [label="bargello.domain.curve.util"]
 
   subgraph bidir_event_bus_edges {
     edge [esep=10,style=dotted,color=red,label="prohibited"]

@@ -1,0 +1,32 @@
+digraph X {
+  rankdir="TB";
+
+  client [label="client"]
+  service [label="service"]
+  state [label="state"]
+  mutations [label="state.mutations"]
+  reads [label="state.reads"]
+  view [label="view"]
+  domain [label="domain"]
+  manager [label="manager"]
+  controller [label="controller"]
+  db [label="db"]
+  config [label="config"]
+
+  client -> view
+  client -> config
+  client -> state
+  client -> manager
+  service -> manager
+  service -> config
+  controller -> manager
+  manager -> db
+  manager -> domain
+  db -> domain
+  view -> state
+  view -> domain
+  view -> manager
+  state -> mutations
+  mutations -> domain
+  state -> reads
+}

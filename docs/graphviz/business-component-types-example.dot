@@ -1,0 +1,15 @@
+digraph X {
+  rankdir="TB";
+  node[shape=component];
+  
+  oauth [label="oauth\n<Process>"]
+  user [label="user\n<Entity>"]
+  application [label="application\n<Entity>"]
+  common [label="common\n<Utility>"]
+
+  oauth -> user
+  oauth -> application
+  oauth -> common
+  user -> common
+  application -> common
+}

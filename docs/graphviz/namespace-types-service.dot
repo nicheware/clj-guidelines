@@ -1,0 +1,19 @@
+digraph X {
+  rankdir="TB";
+
+  service [label="...user-service.service"]
+  config [label="...user-service.config"]
+  controller [label="...user.controller"]
+  manager [label="...user.manager"]
+  db [label="...user.db"]
+  domain [label="...user.domain"]
+  oauth_manager [label="...oauth.manager"]
+  
+  service -> config
+  service -> controller
+  controller -> manager
+  controller -> domain
+  manager -> db
+  manager -> domain
+  oauth_manager -> manager
+}

@@ -1,0 +1,12 @@
+digraph X {
+  rankdir="TB";
+  node[shape=component]
+
+  process [label="Process component"]
+  entity [label="Entity component"]
+  utility [label="Utility component"]
+  process -> entity
+  process -> utility
+  entity -> entity
+  entity -> utility
+}

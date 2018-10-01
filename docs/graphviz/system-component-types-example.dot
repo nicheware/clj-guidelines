@@ -1,0 +1,15 @@
+digraph X {
+  rankdir="TB";
+  node[shape=box3d]
+  
+  web[label="pattern-designer\n<Web Client>"]
+  mobile[label="pattern-store\n<Mobile Client>"]
+  user_service[label="user-service\n<Platform Service>"]
+  pattern_service[label="pattern-service\n<Application Service>"]
+
+  mobile -> user_service
+  mobile -> pattern_service
+  web -> user_service
+  web -> pattern_service
+  pattern_service -> user_service
+}

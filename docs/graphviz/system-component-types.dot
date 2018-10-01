@@ -1,23 +1,29 @@
 digraph X {
   rankdir="TB";
-  //node[style=filled]
+  node[shape=box3d]
 
-  node_mobile[label="Mobile client"]
-  node_web[label="Web client"]
-  node_platform[label="Platform service"]
-  node_router[label="Router service"]
-  node_app[label="Application service"]
-  node_event_bus[label="Event bus"]
+  mobile[label="Mobile client"]
+  web[label="Web client"]
+  platform[label="Platform service"]
+  router[label="Router service"]
+  app[label="Application service"]
+  event_stream[label="Event stream"]
 
-  subgraph bidir_event_bus_edges {
+  subgraph bidir_event_stream_edges {
     edge [style=dotted,dir=both]
-    node_platform -> node_event_bus
+    platform -> event_stream
+    app -> event_stream
+    web -> event_stream
+    mobile -> event_stream
   }
 
-  node_mobile -> node_router
-  node_web -> node_router
-  node_router -> node_app
-  node_router -> node_platform
-  node_app -> node_platform
-  node_platform -> node_platform
+  mobile -> router
+  mobile -> app
+  mobile -> platform
+  web -> router
+  web -> app
+  web -> platform
+  router -> app
+  router -> platform
+  app -> platform
 }

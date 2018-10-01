@@ -1,11 +1,11 @@
 digraph X {
   rankdir="TB";
 
-  curve [label="pattern.domain.curve"]
-  grid [label="pattern.domain.curve.grid"]
-  impl [label="pattern.domain.curve.impl"]
-  implgrid [label="pattern.domain.curve.impl.grid"]
-  mouse [label="pattern.client.view.mouse"]
+  curve [label="bargello.domain.curve"]
+  grid [label="bargello.domain.curve.grid"]
+  impl [label="bargello.domain.curve.impl"]
+  implgrid [label="bargello.domain.curve.impl.grid"]
+  mouse [label="bargello.client.view.mouse"]
 
   subgraph bidir_event_bus_edges {
     edge [esep=10,style=dotted,color=red,label="prohibited"]

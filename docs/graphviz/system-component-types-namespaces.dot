@@ -1,0 +1,10 @@
+digraph X {
+  rankdir="TB";
+
+  web[label="nicheware.patterns.webapps.pattern-designer"]
+  pattern_service[label="nicheware.patterns.services.pattern-service"]
+  domain[label="nicheware.patterns.components.bargello"]
+
+  web -> domain
+  pattern_service -> domain
+}
