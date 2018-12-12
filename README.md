@@ -271,15 +271,15 @@ It defines types of microservices, functions or UI clients and the allowed runti
 
 The System components are reflected in Clojure namespaces in the following ways
 
- - All namespaces start with the company name - ```nicheware```
- - The second level namespace will either be the application name (eg ```patterns```) or ```platform```.
- - Any code which is to be shared across different system components (eg code used in both a web client and an application service) shall be under a 3rd level namespace ```components```, followed  by a namespace for the name of the component.
- - Any web clients will be under a 3rd level namespace ```webapps```, followed by the name of the web client application.
- - Any mobile clients will be under a 3rd level namespace ```mobileapps```, followed by the name of the mobile client application.
- - Any services (application or platform) will be under a 3rd level namespace ```services```, followed by the name of the service.
+ - All namespaces start with the company name - `nicheware`
+ - The second level namespace will either be the application name (eg `patterns`) or `platform`.
+ - Any code which is to be shared across different system components (eg code used in both a web client and an application service) shall be under a 3rd level namespace `components`, followed  by a namespace for the name of the component.
+ - Any web clients will be under a 3rd level namespace `webapps`, followed by the name of the web client application.
+ - Any mobile clients will be under a 3rd level namespace `mobileapps`, followed by the name of the mobile client application.
+ - Any services (application or platform) will be under a 3rd level namespace `services`, followed by the name of the service.
  - All the system component namespaces prefixes are optional, depending on the size of the system and collection of applications.
 
-   For example a development which was not open sourced, was a single web application and used no additional custom services could start with the application name and skip the _company.application.webapps_ prefix (eg no ```nicheware.patterns.webapps``` prefix)
+   For example a development which was not open sourced, was a single web application and used no additional custom services could start with the application name and skip the _company.application.webapps_ prefix (eg no `nicheware.patterns.webapps` prefix)
 
 **Example usage**
 
@@ -344,12 +344,11 @@ A detailed description of the concept of Business Components can be found elsewh
 **Namespace mappings**
 
  - There is typically not a Clojure file for the component namespace, just the directory containing the clojure files different typed namespaces making up that component.
- - Each component would be represented as a namespace of the component name  within a ```components``` namespace.
- - A process component would be represented as a namespace with the process name under a ```processes``` namespace.
- - An entity component would be represented as a namespace with the entity name under a ```entities``` namespace.
- - A utility component would be represented as a namespace with the entity name under a ```utilities``` namespace.
- - For business components used by a single system component, the grouping namespaces of ```processes```, ```entities``` and ```utiltiies``` can live under a services system component or a client system component. (eg: ```nicheware.pattern.services.user-service.entities```)
-- For business components shared acrosss system components, the grouping namespaces can live directly under the ```platform``` namespace or an application namespace. (eg ```nicheware.platform.entities``` or ```nicheware.pattern.entities```)
+ - A process component would be represented as a namespace with the process name under a `processes` namespace.
+ - An entity component would be represented as a namespace with the entity name under a `entities` namespace.
+ - A utility component would be represented as a namespace with the entity name under a `utilities` namespace.
+ - For business components used by a single system component, the grouping namespaces of `processes`, `entities` and `utiltiies` can live under a services system component or a client system component. (eg: `nicheware.pattern.services.user-service.entities`)
+- For business components shared acrosss system components, the grouping namespaces can live directly under the `platform` namespace or an application namespace. (eg `nicheware.platform.entities` or `nicheware.pattern.entities`)
 
 
 **Example usage**
@@ -410,19 +409,23 @@ Any Business or System Component built following the Nicheware guidelines will c
 **Rules**
 
  - All generic namespace rules apply (eg no circular dependences, no calling of ancestor namespace from descedant etc)
- - A **client** can appear within a client system component, i.e. having a ```webapps``` or ```mobileapps``` ancestor.
- - A **service** can appear within a service system component, i.e. having a ```services`` ancestor.
+ - A **client** can appear within a client system component, i.e. having a `webapps` or `mobileapps` ancestor.
+   A `client` can also be the parent namespace in a utilities component, to distinguish between utility functions intended for client vs service use. It is not needed for namespaces which default to client usage (such as `view` and `state`)
+
+ - A **service** can appear within a service system component, i.e. having a `services` ancestor.
+   A `service` can also be the parent namespace in a utilities component, to distinguish between utility functions intended for client vs service use. It is not needed for namespaces which default to services usage (such as `manager` and `db`)
+
  - A **manager** namespace can appear within a service system component, within a client system component or within reusable component.
 
    If the **manager** is implementing the request logic for a service it will appear under the appropriate process or entity component in the service.
 
-   If a service wants to expose its own API client code, it would use a ```client.manager``` namespace for the code, under the ```services``` namespace. eg ```nicheware.platform.services.user-services.client.manager```
+   If a service wants to expose its own API client code, it would use a `client.manager` namespace for the code, under the `services` namespace. eg `nicheware.platform.services.user-services.client.manager`
 
  - A **domain** namespace can appear within a process or entity component namespace under a service system component, within a client system component or within reusable component.
 
-   If the **domain** contains function used in the business logic for a service it will appear under the appropriate process, entity or utility component in the service.
+   If the **domain** contains functions used in the business logic for a service it will appear under the appropriate process, entity or utility component in the service.
 
-   If a service wants to expose a **domain** functions that are specific to client API, it would use a ```client.domain``` namespace for the code, under the ```services``` namespace. eg ```nicheware.platform.services.user-services.client.domain```
+   If a service wants to expose **domain** functions that are specific to a client API, it would use a `client.domain` namespace for the code, under the `services` namespace. eg `nicheware.platform.services.user-services.client.domain`
 
 - A **view** namespaces can appear within a client system component or within a reusable component.
  - A **state** and its child namespaces can appear within a client system component or within a reusable component.
@@ -430,9 +433,9 @@ Any Business or System Component built following the Nicheware guidelines will c
  - A **db** namespace can appear within a process or entity component namespace under a service system component or within reusable component.
  - The use of these specially named sub-namespace is optional, depending on the size and complexity of the application or service.
 
-   For example a very simple client application may have the view and state functions and variables all in the ```client``` namespace.
+   For example a very simple client application may have the view and state functions and variables all in the `client` namespace.
 
-   Similarly a simple service with a single basic API call could have the controller, manager and db functions in the ```service``` namespace.
+   Similarly a simple service with a single basic API call could have the controller, manager and db functions in the `service` namespace.
 
 **Example usage**
 
