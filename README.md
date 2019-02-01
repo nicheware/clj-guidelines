@@ -48,7 +48,7 @@ of the system and the important relationships in the system. Higher level concep
 
 Clojure provides two higher level concepts - namespaces, and build-time artifacts.
 
-The artifacts are the technology components built and deployed as a single unit (eg jar files, js file) and will be discussed in the section [System Components](#system-components)
+The artifacts are the technology components built and deployed as a single unit (eg jar files, js file) and will be discussed in the section [System Components](#system-component-types)
 
 Namespaces are described in this section.
 
@@ -324,7 +324,7 @@ The System components are reflected in Clojure namespaces in the following ways
 ``` clojure
 nicheware.platform.services.user-service
 nicheware.patterns.components.bargello
-nichewarte.patterns.services.pattern-service
+nicheware.patterns.services.pattern-service
 nicheware.patterns.webapps.pattern-designer
 nicheware.patterns.mobileapps.pattern-store
 ```
@@ -507,3 +507,29 @@ nicheware.platform.services.user-service.processes.oauth.manager
 ```
 
 ![namespace-types](./docs/generated/namespace-types-service.png)
+
+## Contributors
+
+The diagrams used in these guidelines are generated via graphviz, using a controlling makefile.
+
+Required installation:
+
+- make: On macOS - ```xcode-select --install```
+- graphviz: On macOS - ```brew install graphviz```
+
+To update any diagram:
+
+- edit the appropriate ```.dot``` file in ```docs/graphviz```
+- run make
+- this will generate ```.png``` files for all modified ```.dot``` files in ```docs/generated```
+
+```
+cd $DEV_HOME/clj-guidelines
+make
+```
+
+## License
+
+Copyright © 2018 Nicheware Solutions Pty Ltd
+
+Distributed under the Eclipse Public License either version 1.0 or (at your option) any later version, the same as Clojure.
