@@ -1,20 +1,44 @@
 # Introduction
 ## About
 
-Covers design, development and coding  guidelines as used in Nicheware Solutions Clojure projects.
+This document describes the design, development and coding guidelines as used in Nicheware Solutions Clojure projects.
+
+It includes the following main sections:
+
+* [Coding style](#coding-style)
+* [Namespaces](#namespaces)
+* [System Design Concepts](#system-design-concepts)
+
 ## Categories
 
 In describing the concepts used to architect and design an application or system of multiple applications and services, this document
-uses categories.
+uses **categories**.
 
-A category consists of the category name, the objects that make up the category, and the transforms or relationships between those objects
+A **category** consists of the category **name**, the **objects** that make up the category, and the **transforms** or relationships between those objects
 in the category.
 
 This is a simple framework for describing different levels of abstraction used in examining a system under development. In each category
 the objects and relationships will often map to specific implementation constructs, such as microservice services, namespaces or functions.
 
+# Coding style
+
+The Nicheware code follows the style guidelines outlined in [Clojure Style Guide](https://github.com/bbatsov/clojure-style-guide), with the following exceptions:
+
+- No need to avoid namespaces with more than 5 segments. (see Namespace section below for rationale)
+- Use of ```defn-``` optional for private functions, to simplify unit test access.
+- Docstring arguments are described using markdown list format.
+
 
 # Namespaces
+
+This section describes namespace conventions within Nicheware Clojure projects.
+
+It covers:
+
+* [Objective](#objective)
+* [Namespace dependency category](#namespace-dependency-category)
+* [Namespace rules](#namespace-rules)
+
 ## Objective
 
 In describing the design of a system implemented in a functional language like Clojure, the most obvious concept to deal with are functions.
@@ -32,15 +56,13 @@ Because of the additional level of abstraction that namespaces can provide, we b
 
 Once namespaces reflect design concepts used within a project then it is easy for developers to grasp the design intentions of a codebase simply by viewing the namespaces used. It reduces (but does not remove) the need to follow detailed function to function calling sequences.
 
-What the design concepts are can vary between projects. What is important is that there are some consistent design principles being followed, and they are reflected in namespace names and relationships.
+Exactly which design concepts are used can vary between projects. What is more important is that there are some consistent design principles being followed, and they are reflected in namespace names and relationships.
 
-## Namespace mapping to design concepts
-
-The design concepts and namespaces mappings to be used within Nicheware projects is described in the following section [System Design Concept](#system-design-concepts)
+The design concepts and namespaces mappings to be used within Nicheware projects are described in the following section [System Design Concepts](#system-design-concepts)
 
 ## Namespace Dependency category
 
-In the following section on namespace rules, examples are shown using **Namespace dependency** diagrams. This category is defined as:
+In the following sections on namespace rules, examples are shown using **Namespace dependency** diagrams. This category is defined as:
 
 **Category**
 
@@ -53,8 +75,8 @@ In the following section on namespace rules, examples are shown using **Namespac
 **Morphism / ->**
 
 > Indicates transfer of runtime control from one namespace to another, via a function call or variable reference.
-> * Black indicates this transfer is valid, according to Namespace rules.
-> * Red indicates this transfer is prohibited according to Namespace rules.
+> * Black solid line indicates this transfer is valid, according to Namespace rules.
+> * Red dotted line indicates this transfer is prohibited according to Namespace rules.
 
 **Example**
 
@@ -70,16 +92,16 @@ The summary is:
 * **Rule 1**: Namespace dependencies cannot be circular
 * **Rule 2**: A namespace cannot have a dependency on any ancestor namespace
 * **Rule 3**: A namespace can have a dependency on a sibling namespace
-* **Rule 4**: The impl namespace is private to its parent namespace
+* **Rule 4**: The ***impl*** namespace is private to its parent namespace
 * **Rule 5**: Descendants of impl can only have dependencies which would be valid if impl was removed
 
 ### Rule 1: Namespace dependencies cannot be circular
 
 **Definition**
 
-Namespace-A has a dependency on Namespace-B  if Namespace-A contains any variable or function that references any variable or function in Namespace-B.
+*Namespace-A* is defined to have a dependency on *Namespace-B* if *Namespace-A* contains any variable or function that references any variable or function in *Namespace-B*.
 
-These dependencies are transitive, so if Namespace-B then has a dependency on Namespace-C, then Namespace-A is considered to have a dependency on Namespace-C.
+These dependencies are transitive, so if *Namespace-B* then has a dependency on *Namespace-C*, then *Namespace-A* is considered to have a dependency on *Namespace-C*.
 
 This rule prohibits circular dependencies between namespaces, either directly or via a chain of dependencies.
 
@@ -87,7 +109,9 @@ This rule prohibits circular dependencies between namespaces, either directly or
 
 This make sense not just from a Clojure code loading perspective, but also from architectural coupling point of view.
 
-The less coupling between namespaces the easier it is to reason about the purpose and behaviour of any given namesapce. It also makes it easier to reuse the functions in a namespace across the application or to later refactor the application and extract namespaces into other services, libraries or components.
+The less coupling between namespaces the easier it is to reason about the purpose and behaviour of any given namespace.
+
+It also makes it easier to reuse the functions in a namespace across the application or to later refactor the application and extract namespaces into other services, libraries or components.
 
 **Example**
 
@@ -116,13 +140,13 @@ This rule prevents a namespace from having a dependency (chained or direct) on a
 
 **Rationale**
 
-Given this rule  defines a dependency relationship based on the namespace hierarchy, it makes it easy to reason about any expected calling dependencies between namespaces within a hierarchy without the need to exam any of the functions in the namespaces.
+Given this rule  defines a dependency relationship based on the namespace hierarchy, it makes it easy to reason about any expected calling dependencies between namespaces within a hierarchy without the need to examine any of the functions in the namespaces.
 
 The rule as defined has an implication that namespaces in a hierarchy have a composition relationship - i.e. a parent namespace is composed of its child namespaces. i.e. Any function within a parent namespace may call any function within a child namespace. A child cannot call its parent (or ancestor) so results in a more standalone component grouping of functions (and namespaces)
 
 An implication of this rule is that you could not define `protocols` in the parent then have implementations of them in child namespaces. This is a convention in some projects.
 
-The alternative is to instead have the protocols in a sibling of the parent, and reference them from all other siblings. So the protocols and namespaces using those protocols are still grouped under the same parent, but there is no child -> ancestor calling dependency.
+The alternative is to instead have the protocols in a child of the parent, and reference them from all other children. So the protocols and namespaces using those protocols are still grouped under the same parent, but there is no child -> ancestor calling dependency.
 
 **Examples**
 
@@ -161,23 +185,23 @@ The following are allowed:
 
 **Definition**
 
-With regard to the Nicheware coding conventions, **impl** is a reserved namespace word.
+With regard to the Nicheware coding conventions, ***impl*** is a reserved namespace word.
 
-The parent namespace is the direct parent of the **impl** namespace.
+The parent namespace is the direct parent of the ***impl*** namespace.
 
-This rule only allows the parent namespace or parent descendant namespaces to have a dependency on the **impl** namespace or any it is descendant namespaces.
+This rule only allows the parent namespace or parent descendant namespaces to have a dependency on the ***impl*** namespace or any it is descendant namespaces.
 
-This rule is a restriction on the sibling rule. The sibling rule allows any namespace to have a dependency anywhere down the sibling tree. The impl namespace marks a boundary point beyond which only direct descendants of the parent may access.
+This rule is a restriction on the sibling rule. The sibling rule allows any namespace to have a dependency anywhere down the sibling tree. The ***impl*** namespace marks a boundary point beyond which only direct descendants of the parent may access.
 
 **Rationale**
 
-The **impl** namespace brings the concept of public/private to the level of namespace dependencies. The intention is to allow a namespace (the direct parent) to have implementation namespaces (and their contained functions and variables) that are not accessible outside the parent namespace component.
+The ***impl*** namespace brings the concept of public/private to the level of namespace dependencies. The intention is to allow a namespace (the direct parent) to have implementation namespaces (and their contained functions and variables) that are not accessible outside the parent namespace component.
 
-This brings the benefits of information hiding. It allows for ease of maintenance within the impl namespaces, where changes and refactoring can be made knowing that the only users of those namespaces and functions are within the same parent component (as represented by the parent namespace)
+This brings the benefits of information hiding. It allows for ease of maintenance within the ***impl*** namespaces, where changes and refactoring can be made knowing that the only users of those namespaces and functions are within the same parent component (as represented by the parent namespace)
 
-The use of **impl* is optional, and is only intended for complex namespaces where the number of functions or number of child namespaces under the unifying parent has grown large. In these cases it allows for a cleaner and more obvious seperation of public interface code from detailed implementation code.
+The use of ***impl*** is optional, and is only intended for complex namespaces where the number of functions or number of child namespaces under the unifying parent has grown large. In these cases it allows for a cleaner and more obvious seperation of public interface code from detailed implementation code.
 
-For simpler namespaces, interface and implementation functions may co-exist in the same namespace. The Nicheware standard is to use layout conventions (function ordering, public/private comment markers) to make the difference clear between public and private functions. For ease of testing, private functions do not have to use the clojure private modifier.
+For simpler namespaces, interface and implementation functions may co-exist in the same namespace. The Nicheware standard is to use layout conventions (function ordering, public/private comment markers) to make the difference clear between public and private functions. For ease of testing, private functions do not have to use the Clojure private modifier.
 
 **Examples**
 
@@ -192,19 +216,19 @@ bargello.client.view.mouse/on-click -> bargello.domain.impl.curve.grid/init (PRO
 ### Rule 5: Descendants of impl can only have dependencies which would be valid if impl was removed
 **Definition**
 
-A descendant of **impl** is any namespace which has the **impl** as an ancestor.
+A descendant of ***impl*** is any namespace which has the ***impl*** as an ancestor.
 
-Removing the **impl** namespace from a descendant means creating a namespace for the decsendant which has all ancestors except **impl**.
+Removing the ***impl*** namespace from a descendant means creating a namespace for the decsendant which has all ancestors except ***impl***.
 
-This rule states that a descendant of **impl** may only have dependencies which would also be valid according to all other namespace rules for the same namespace with **impl** removed from that descendant namespace.
+This rule states that a descendant of ***impl*** may only have dependencies which would also be valid according to all other namespace rules for the same namespace with ***impl*** removed from that descendant namespace.
 
-In addition the descendant namespace cannot call a namespace which would have the same name as the **impl** removed namespace.
+In addition the descendant namespace cannot call a namespace which would have the same name as the ***impl*** removed namespace.
 
 **Rationale**
 
-This is intended to support the concept that a public descendant namespace of the impl parent would be expected to call implementation functions in the similarly named descendant of the **impl** or private namespace.
+This is intended to support the concept that a public descendant namespace of the ***impl*** parent would be expected to call implementation functions in the similarly named descendant of the ***impl*** or private namespace.
 
-From the other direction the **impl** namespace, would not be expected to have a dependency on the similarly named public namespace.
+From the other direction the ***impl*** namespace, would not be expected to have a dependency on the similarly named public namespace.
 
 **Examples**
 
@@ -216,6 +240,15 @@ bargello.domain.curve.impl.grid.rows/display-points -> bargello.domain.curve.gri
 ![impl-removed](./docs/generated/namespace-impl-removed.png)
 
 # System Design Concepts
+
+This section describes the abstraction levels and design concepts used within Nicheware project, and how they map to Clojure implementation constructs.
+
+It covers the following abstraction levels:
+
+* [System Component Types](#system-component-types)
+* [Business Component Types](#business-component-types)
+* [Standard namespaces](#standard-namespaces)
+
 ## System Component Types
 
 This category describes the distributed architecture of any system/application that follows these Nicheware guidelines.
@@ -257,15 +290,20 @@ It defines types of microservices, functions or UI clients and the allowed runti
  - Any application can be implemented in any technology stack, as all communication is language independent (HTTP, RESTful JSON, JSON events)
  - However the current Nicheware guidelines are that:
 
-   * **_Platform and Application services_**: will be implemented as either
+   * ***Mobile Clients***: will be implemented in ClojureScript running under _React Native_ using the _om.next_ framework. Only used where features of the progressive web application not sufficient.
+
+   * ***WebClients***: will be implemented in ClojureScript using the _om.next_ _react_ based framework. All clients will be mobile responsive, utilizing features of progressive web applications.
+
+   * ***Router Service***: either a custom application web-frontend service, implemented with the same stack as an Application service, or a GraphQL service (custom or third party such as AWS AppSync)
+
+   * ***Platform and Application services***: will be implemented as either
      - Docker container microservice instances running in a container cluster. Implemented in Clojure using the _luminus_ configuration for RESTful implementation (_compojure-api_, _swagger_, _hugsql_)
 
-     - Virtual function based services, where a collection of functions deployed to a serverless environment like AWS Lambda make up the conceptual microservice. Implemented in Clojure and deployed as either a Javascript bundle to a Node JS lamda instance or a Java jar to a Java Lamdba instance.
+     - Virtual function based services, where a collection of functions deployed to a serverless environment like AWS Lambda make up the conceptual microservice. Implemented in Clojure and deployed as either a Javascript bundle to a AWS Node JS Lamda instance or a Java jar to an AWS Java Lamdba instance.
 
-   * **_WebClients_**: will be implemented in Clojurescript using the _om.next_ _react_ based framework. All clients will be mobile responsive, utilizing features of progressive web applications.
 
-   * **_Mobile Clients_**: will be implemented in Clojurescript running under _React Native_ using the _om.next_ framework. Only used where features of the progressive web application not sufficient.
- - Each Application component will be created as its own clojure project and git repository. (eg each microservice is a standalone project).
+
+ - Each Application component will be created as its own Clojure project and git repository. (eg each microservice is a standalone project).
 
 **Namespace mapping**
 
@@ -273,7 +311,7 @@ The System components are reflected in Clojure namespaces in the following ways
 
  - All namespaces start with the company name - `nicheware`
  - The second level namespace will either be the application name (eg `patterns`) or `platform`.
- - Any code which is to be shared across different system components (eg code used in both a web client and an application service) shall be under a 3rd level namespace `components`, followed  by a namespace for the name of the component.
+ - Any code which is to be shared across different system components (eg code used in both a web client and an application service) shall be under a 3rd level business component namespace such as *processes*, *entities* or *utilities*.
  - Any web clients will be under a 3rd level namespace `webapps`, followed by the name of the web client application.
  - Any mobile clients will be under a 3rd level namespace `mobileapps`, followed by the name of the mobile client application.
  - Any services (application or platform) will be under a 3rd level namespace `services`, followed by the name of the service.
@@ -304,7 +342,7 @@ This category describes the types of Business components that can exist within a
 
 Communication is typically via function calls.
 
-Any System Component built following the Nicheware guidelines and utilize the design concept of Business Components will ensure all components conform to these rules.
+Any System Component built following the Nicheware guidelines and utilizing the design concept of Business Components will ensure all components conform to these rules.
 
 A detailed description of the concept of Business Components can be found elsewhere in the Nicheware design guidelines.
 
@@ -325,7 +363,7 @@ A detailed description of the concept of Business Components can be found elsewh
 ![business-component-types](./docs/generated/business-component-types.png)
 
 **Object descriptions**
- - **_Process_**: These components represent an application process or business activity. They often represent domain specific business tasks, and typically reflect the core activities of the business being modeled. They don't include any entities of there own but will manipulate others entities via the Entity components within the system.
+ - **_Process_**: These components represent an application process or business activity. They often represent domain specific business tasks, and typically reflect the core activities of the business being modeled. They don't include any entities of their own but will manipulate others entities via the Entity components within the system.
 
  - **_Entity_**: These components represent the main business concepts within the application, and provide the necessary services to manage them, typically including all CRUD operations. They include management logic, but only that required to deal with the entities within the component. An entity component may manage multiple persistent entities if their lifecycle is tightly bound.
 
@@ -337,9 +375,10 @@ A detailed description of the concept of Business Components can be found elsewh
 
 **Clojure implementation**
 
- - An entity component within a microservice system component could contain the controller for API calls to the entity, manager code for functions called directly from the routers to implement the API calls, domain code to implement the pure functional logic of the component, and code to handle the persistence of entity data.
+ - A ***process*** component within a microservices could contain routers for API calls and manager functions. The manager could would contain the workflow logic for operate with one or more entity components. It typcially would not contain much if any domain code and no persistence code.
 
- - A proces component wihtin a microservices could contain routers for API calls and manager functions. it typcially would not contain much if any domain code and no persistence code.
+ - An ***entity*** component within a microservice system component could contain the controller for API calls to the entity, manager code for functions called directly from the routers to implement the API calls, domain code to implement the pure functional logic of the component, and code to handle the persistence of entity data.
+
 
 **Namespace mappings**
 
@@ -403,7 +442,7 @@ Any Business or System Component built following the Nicheware guidelines will c
  - **controller**: Namespace used to define API controller function, as entry points for services. eg route definitions for compojure.
  - **manager**: Namespace used for management or process functions. Can include the co-ordination of mutation operations, such as managing db functions in a service or managing calls to external services from a service or client.
  - **db**: Namespace for all persistence related functions, query or update.
- - **domain**: Namespace for pure functions specific to a given problem domain of th.......e parent component, service or client. For a large problem domain may containing a complex namespace hierarchy of descendants.
+ - **domain**: Namespace for pure functions specific to a given problem domain of the parent component, service or client. A large problem domain may include namespace hierarchy of descendants.
 - **config**: Namespace for configuration data used in client or service. Includes functions and data defintions utilized by other namespace via whatever the standard configuration mechanism in use for the system component.
 
 **Rules**
@@ -427,7 +466,7 @@ Any Business or System Component built following the Nicheware guidelines will c
 
    If a service wants to expose **domain** functions that are specific to a client API, it would use a `client.domain` namespace for the code, under the `services` namespace. eg `nicheware.platform.services.user-services.client.domain`
 
-- A **view** namespaces can appear within a client system component or within a reusable component.
+- A **view** namespace can appear within a client system component or within a reusable component.
  - A **state** and its child namespaces can appear within a client system component or within a reusable component.
  - A **controller** namespace can appear within a process or entity component namespace under a service system component or within reusable component.
  - A **db** namespace can appear within a process or entity component namespace under a service system component or within reusable component.
